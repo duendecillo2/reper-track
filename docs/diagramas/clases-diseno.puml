@@ -1,0 +1,187 @@
+@startuml
+!pragma layout smetana
+title ReperTrack - Diagrama de Clases de Diseno
+
+skinparam classAttributeIconSize 0
+skinparam classFontSize 11
+skinparam classBackgroundColor #FAFAFA
+skinparam classBorderColor #1c5c3c
+skinparam packageStyle rectangle
+skinparam packageBackgroundColor #F0F4F0
+
+package modelo {
+  class Musico {
+    -musicoId : int
+    -nombre : String
+    -nivel : Nivel
+    -estilo : String
+    +getMusicoId() : int
+    +getNombre() : String
+    +setNombre(nombre : String)
+  }
+
+  class Instrumento {
+    -instrumentoId : int
+    -musico : Musico
+    -nombre : String
+    -tipo : TipoInstrumento
+    -observaciones : String
+    -activo : boolean
+    +getInstrumentoId() : int
+    +getMusico() : Musico
+    +getNombre() : String
+    +desactivar()
+  }
+
+  abstract class ElementoDeEstudio {
+    -elementoId : int
+    -nombre : String
+    -instrumento : Instrumento
+    -nivelDificultad : int
+    -tiempoEstimadoDominioMin : int
+    -activo : boolean
+    +{abstract} calcularProgreso(min : int) : double
+  }
+
+  class Cancion {
+    -autor : String
+    -interpreteOriginal : String
+    -tonalidad : String
+    -compas : String
+    +calcularProgreso(min : int) : double
+  }
+
+  class Ejercicio {
+    -tipoEjercicio : TipoEjercicio
+    -tempoSugeridoBPM : int
+    +calcularProgreso(min : int) : double
+  }
+
+  class SesionDePractica {
+    -sesionId : int
+    -instrumento : Instrumento
+    -elemento : ElementoDeEstudio
+    -fechaRegistro : LocalDateTime
+    -tiempoNetoMin : int
+    -comentario : String
+    +validar() : void
+  }
+
+  class Estadistica {
+    -minutosPorInstrumento : Map
+    -minutosPorElemento : Map
+    -totalSesiones : int
+    +agregarMinutosInstrumento(id : int, min : long)
+    +estaVacia() : boolean
+  }
+}
+
+package excepcion {
+  class RangoInvalidoException
+  class LongitudExcedidaException
+  class SesionSinReferenciaException
+  class PersistenciaException
+}
+
+package util {
+  class ConexionDB {
+    +{static} obtenerConexion() : Connection
+    +{static} mysqlDisponible() : boolean
+  }
+  class Validador {
+    +{static} exigirRangoEntero(campo : String, v : int, min : int, max : int)
+    +{static} exigirNoVacio(campo : String, v : String)
+  }
+}
+
+package dao {
+  interface InstrumentoDAO {
+    +insertar(i : Instrumento) : void
+    +obtener(id : int) : Instrumento
+    +listar() : List
+  }
+  interface ElementoDAO {
+    +insertar(e : ElementoDeEstudio) : void
+    +listarPorInstrumento(id : int) : List
+  }
+  interface SesionDAO {
+    +guardar(s : SesionDePractica) : int
+    +listar() : List
+    +acumuladoPorInstrumento() : Map
+  }
+  class InstrumentoDAOImpl
+  class ElementoDAOImpl
+  class SesionDAOImpl
+}
+
+package service {
+  class SesionService {
+    -dao : SesionDAO
+    +registrarSesion(i : Instrumento, e : ElementoDeEstudio, min : int, c : String) : int
+    +ordenarPorFechaDesc(lista : List) : List
+  }
+  class InstrumentoService
+  class ElementoService {
+    -undo : Pila
+    +alta(e : ElementoDeEstudio) : void
+  }
+  class EstadisticaService {
+    +calcular() : Estadistica
+  }
+  class MotorAlertasService {
+    +calcular() : Cola
+  }
+  class ExportadorPdfService {
+    +exportar(est : Estadistica, ruta : String) : void
+  }
+}
+
+package controlador {
+  class MenuPrincipal {
+    +iniciar() : void
+    +mostrarMenu() : void
+  }
+  class SesionController
+  class InstrumentoController
+  class ElementoController
+  class EstadisticaController
+  class AlertaController
+}
+
+package estructuras {
+  class ListaEnlazadaSimple
+  class Pila
+  class Cola
+  class Busqueda
+  class Ordenacion
+}
+
+Musico "1" *-- "0..*" Instrumento : posee
+Instrumento "1" *-- "0..*" ElementoDeEstudio : agrupa
+Musico "1" -- "0..*" SesionDePractica : registra
+Instrumento "1" -- "0..*" SesionDePractica : utilizado en
+ElementoDeEstudio "1" -- "0..*" SesionDePractica : aborda
+ElementoDeEstudio <|-- Cancion
+ElementoDeEstudio <|-- Ejercicio
+
+InstrumentoDAO <|.. InstrumentoDAOImpl
+ElementoDAO <|.. ElementoDAOImpl
+SesionDAO <|.. SesionDAOImpl
+
+InstrumentoService --> InstrumentoDAO
+ElementoService --> ElementoDAO
+SesionService --> SesionDAO
+EstadisticaService --> SesionDAO
+MotorAlertasService --> SesionDAO
+
+MenuPrincipal --> SesionController
+MenuPrincipal --> InstrumentoController
+MenuPrincipal --> ElementoController
+MenuPrincipal --> EstadisticaController
+MenuPrincipal --> AlertaController
+
+SesionController --> SesionService
+ElementoController --> ElementoService
+InstrumentoController --> InstrumentoService
+
+@enduml

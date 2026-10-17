@@ -1,0 +1,75 @@
+@startuml
+!pragma layout smetana
+title CU006 - Registrar Sesion de Practica (Curso normal)
+
+skinparam sequenceMessageAlign center
+skinparam shadowing false
+skinparam ParticipantPadding 12
+skinparam BoxPadding 8
+
+actor Musico
+participant "MenuPrincipal" as MP
+participant "SesionController" as SC
+participant "SesionService" as SS
+participant "SesionDePractica" as SP
+participant "Instrumento" as INS
+participant "ElementoDeEstudio" as EE
+participant "SesionDAO" as DAO
+participant "ConexionDB" as DB
+database "MySQL" as M
+
+Musico -> MP : seleccionar "Registrar Sesion"
+activate MP
+MP -> SC : registrarSesion()
+activate SC
+
+SC -> Musico : "ID de Instrumento:"
+Musico -> SC : 1
+SC -> SS : validarInstrumento(1)
+activate SS
+SS -> DAO : obtenerInstrumento(1)
+activate DAO
+DAO -> DB : obtenerConexion()
+DB --> DAO : Connection
+DAO -> M : SELECT * FROM instrumento WHERE instrumento_id = ?
+M --> DAO : fila
+DAO --> SS : Instrumento
+deactivate DAO
+SS --> SC : Instrumento OK
+
+SC -> Musico : "ID de Elemento:" (filtrados por instrumento)
+Musico -> SC : 5
+SC -> SS : validarElemento(5)
+SS -> DAO : listarPorInstrumento(1)
+DAO --> SS : List<ElementoDeEstudio>
+SS --> SC : Elemento OK
+
+SC -> Musico : pedir tiempo neto / cronometrar
+Musico -> SC : 45
+SC -> Musico : pedir comentario (opcional)
+Musico -> SC : "ensayando cambios de voicing"
+
+SC -> SP : new SesionDePractica(instrumento, elemento, 45, comentario)
+activate SP
+SP -> SP : validar() / RN-01
+deactivate SP
+
+SC -> SS : registrarSesion(sesion)
+SS -> DB : con = obtenerConexion(); setAutoCommit(false)
+SS -> DAO : insertar(sesion)
+activate DAO
+DAO -> M : INSERT INTO sesion_practica ...
+M --> DAO : 1 fila afectada
+DAO --> SS : sesionId
+deactivate DAO
+SS -> DB : con.commit()
+SS --> SC : void
+deactivate SS
+
+SC -> Musico : "Sesion registrada con exito (id=N)"
+deactivate SC
+deactivate MP
+
+note over SC, SS : RN-02: tiempo > 0 ; RN-04: comentario <= 500 ; RN-05: ACID
+
+@enduml

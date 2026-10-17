@@ -1,0 +1,70 @@
+@startuml
+!pragma layout smetana
+title ReperTrack - Diagrama de Dominio
+
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam classBackgroundColor #FAFAFA
+skinparam classBorderColor #1c5c3c
+
+class Musico {
+  +musicoId : int
+  +nombre : String
+  +nivel : String {principiante, intermedio, avanzado}
+  +estilo : String {clasico, jazz, popular, folklorico}
+}
+
+class Instrumento {
+  +instrumentoId : int
+  +nombre : String
+  +tipo : String {cuerda, viento, percusion, teclado, otro}
+  +observaciones : String
+  +activo : boolean
+}
+
+abstract class ElementoDeEstudio {
+  +elementoId : int
+  +nombre : String
+  +nivelDificultad : int {1..10}
+  +tiempoEstimadoDominioMin : int
+  +activo : boolean
+}
+
+class Cancion {
+  +autor : String
+  +interpreteOriginal : String
+  +tonalidad : String
+  +compas : String
+}
+
+class Ejercicio {
+  +tipoEjercicio : String {escala, arpegio, etude, patron ritmico}
+  +tempoSugeridoBPM : int {20..300}
+}
+
+class SesionDePractica {
+  +sesionId : int
+  +fecha : Date
+  +horaInicio : LocalTime
+  +horaFin : LocalTime
+  +tiempoNetoMin : int {>0}
+  +comentario : String {0..500}
+}
+
+class Estadistica {
+  +minutosAcumuladosPorInstrumento : Map
+  +minutosAcumuladosPorElemento : Map
+  +frecuenciaSemanal : int
+  +promedioMinutosPorSesion : double
+}
+
+Musico "1" *-- "0..*" Instrumento : posee
+Musico "1" -- "0..*" SesionDePractica : registra
+Instrumento "1" *-- "0..*" ElementoDeEstudio : agrupa
+Instrumento "1" -- "0..*" SesionDePractica : utilizado en
+ElementoDeEstudio "1" -- "0..*" SesionDePractica : abordado en
+ElementoDeEstudio <|-- Cancion
+ElementoDeEstudio <|-- Ejercicio
+SesionDePractica ..> Estadistica : genera
+
+@enduml

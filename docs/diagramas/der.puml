@@ -1,0 +1,91 @@
+@startuml
+!pragma layout smetana
+title ReperTrack - Diagrama Entidad-Relacion (MySQL 8 / InnoDB / utf8mb4)
+
+skinparam entityAttributeIconSize 0
+skinparam entityFontSize 11
+skinparam entityBackgroundColor #FAFAFA
+skinparam entityBorderColor #1c5c3c
+
+entity "musico" as M {
+  *musico_id : INT UNSIGNED <<PK, AUTO_INCREMENT>>
+  --
+  nombre    : VARCHAR(100) NOT NULL
+  nivel     : ENUM('principiante','intermedio','avanzado') NOT NULL
+  estilo    : VARCHAR(50) NOT NULL
+}
+
+entity "instrumento" as I {
+  *instrumento_id : INT UNSIGNED <<PK, AUTO_INCREMENT>>
+  --
+  *musico_id      : INT UNSIGNED <<FK, NOT NULL>>
+  nombre          : VARCHAR(100) NOT NULL
+  tipo            : VARCHAR(30) NOT NULL
+  observaciones   : TEXT NULL
+  activo          : TINYINT(1) NOT NULL DEFAULT 1
+  --
+  <<UNIQUE>> (musico_id, nombre)
+  <<INDEX>>  idx_inst_musico (musico_id)
+  <<CHECK>>  tipo IN ('cuerda','viento','percusion','teclado','otro')
+}
+
+entity "elemento_estudio" as E {
+  *elemento_id : INT UNSIGNED <<PK, AUTO_INCREMENT>>
+  --
+  *instrumento_id      : INT UNSIGNED <<FK, NOT NULL>>
+  nombre               : VARCHAR(150) NOT NULL
+  categoria            : ENUM('Cancion','Ejercicio') NOT NULL
+  dificultad           : TINYINT NOT NULL
+  autor                : VARCHAR(100) NULL
+  interprete_original  : VARCHAR(100) NULL
+  tonalidad            : VARCHAR(20) NULL
+  compas               : VARCHAR(20) NULL
+  tipo_ejercicio       : VARCHAR(30) NULL
+  bpm_sugerido         : SMALLINT NULL
+  activo               : TINYINT(1) NOT NULL DEFAULT 1
+  --
+  <<UNIQUE>> (instrumento_id, nombre)
+  <<INDEX>>  idx_elem_inst (instrumento_id)
+  <<INDEX>>  idx_elem_categoria (categoria)
+  <<CHECK>>  dificultad BETWEEN 1 AND 10
+  <<CHECK>>  bpm_sugerido BETWEEN 20 AND 300
+  <<CHECK>>  (Cancion con autor) OR (Ejercicio con tipo_ejercicio)
+}
+
+entity "sesion_practica" as S {
+  *sesion_id : INT UNSIGNED <<PK, AUTO_INCREMENT>>
+  --
+  *instrumento_id  : INT UNSIGNED <<FK, NOT NULL>>
+  *elemento_id     : INT UNSIGNED <<FK, NOT NULL>>
+  fecha_registro   : DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+  tiempo_neto_min  : INT NOT NULL
+  comentario       : VARCHAR(500) NULL
+  --
+  <<INDEX>> idx_sesion_inst_ts (instrumento_id, fecha_registro)
+  <<INDEX>> idx_sesion_elem_ts (elemento_id, fecha_registro)
+  <<INDEX>> idx_sesion_fecha   (fecha_registro)
+  <<CHECK>> tiempo_neto_min > 0
+  <<CHECK>> CHAR_LENGTH(comentario) <= 500
+}
+
+M ||--o{ I : "1..N  posee"
+I ||--o{ E : "1..N  agrupa"
+M ||--o{ S : "1..N  registra"
+I ||--o{ S : "1..N  utilizado_en"
+E ||--o{ S : "1..N  aborda"
+
+note bottom of I
+  Baja logica con activo=0.
+  ON DELETE RESTRICT: las FK
+  nunca borran en cascada para
+  no perder sesiones.
+end note
+
+note bottom of E
+  Single-table inheritance: la
+  columna categoria + columnas
+  especificas nulables distinguen
+  Cancion de Ejercicio.
+end note
+
+@enduml

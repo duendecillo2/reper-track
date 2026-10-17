@@ -1,0 +1,56 @@
+@startuml
+!pragma layout smetana
+title ReperTrack - Diagrama de Despliegue Local
+
+skinparam componentStyle rectangle
+skinparam componentBackgroundColor #FAFAFA
+skinparam componentBorderColor #1c5c3c
+skinparam nodeBackgroundColor #F0F4F0
+skinparam nodeBorderColor #1c5c3c
+skinparam artifactBackgroundColor #FFFFFF
+skinparam databaseBackgroundColor #FFFFFF
+skinparam databaseBorderColor #1c5c3c
+
+node "PC del Musico\n(Windows 10+ / Linux 5.x / macOS 11+)" as PC {
+  artifact "repertrack-app.jar" as JAR
+  artifact "repertrack-schema.sql" as DDL
+  artifact "repertrack-pruebas-integridad.sql" as TEST
+  artifact "README.md" as DOC
+
+  database "MySQL 8.0\n(InnoDB, utf8mb4)\nschema: repertrack" as DB {
+    artifact "musico" as T1
+    artifact "instrumento" as T2
+    artifact "elemento_estudio" as T3
+    artifact "sesion_practica" as T4
+  }
+}
+
+node "Entorno de ejecucion" as JRE {
+  artifact "JRE 11 LTS" as JVM
+}
+
+node "Conector" as CON {
+  artifact "mysql-connector-j 8.x" as JDBC
+}
+
+PC --> JRE : ejecuta
+JAR --> JVM : corre sobre
+JAR --> JDBC : usa
+JDBC --> DB : TCP/IP\nloopback :3306
+DDL --> DB : crea esquema en
+TEST --> DB : valida integridad en
+DOC --> PC : documenta instalacion en
+
+note right of DB
+  **Sin servidor web.**
+  Sin Apache/Tomcat/HTTP/XAMPP.
+  Loopback unicamente.
+end note
+
+note left of JAR
+  **Sin frameworks de UI.**
+  Aplicacion de consola Java
+  (Scanner + System.out).
+end note
+
+@enduml

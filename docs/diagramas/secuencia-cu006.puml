@@ -1,6 +1,6 @@
 @startuml
 !pragma layout smetana
-title CU006 - Registrar Sesion de Practica (Curso normal)
+title CU006 - Registrar Sesión de Práctica (Curso normal)
 
 skinparam sequenceMessageAlign center
 skinparam shadowing false
@@ -66,7 +66,7 @@ SS -> DB : con.commit()
 SS --> SC : void
 deactivate SS
 
-SC -> Musico : "Sesion registrada con exito (id=N)"
+SC -> Musico : "Sesión registrada con éxito (id=N)"
 deactivate SC
 deactivate MP
 

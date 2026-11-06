@@ -15,6 +15,7 @@ node "PC del Musico\n(Windows 10+ / Linux 5.x / macOS 11+)" as PC {
   artifact "repertrack-app.jar" as JAR
   artifact "repertrack-schema.sql" as DDL
   artifact "repertrack-pruebas-integridad.sql" as TEST
+  artifact "reporte-estadisticas.txt" as TXT
   artifact "README.md" as DOC
 
   database "MySQL 8.0\n(InnoDB, utf8mb4)\nschema: repertrack" as DB {
@@ -39,17 +40,18 @@ JAR --> JDBC : usa
 JDBC --> DB : TCP/IP\nloopback :3306
 DDL --> DB : crea esquema en
 TEST --> DB : valida integridad en
-DOC --> PC : documenta instalacion en
+JAR --> TXT : escribe reporte en
+DOC --> PC : documenta instalación en
 
 note right of DB
   **Sin servidor web.**
   Sin Apache/Tomcat/HTTP/XAMPP.
-  Loopback unicamente.
+  Loopback únicamente.
 end note
 
 note left of JAR
   **Sin frameworks de UI.**
-  Aplicacion de consola Java
+  Aplicación de consola Java
   (Scanner + System.out).
 end note
 

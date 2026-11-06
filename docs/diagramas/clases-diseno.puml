@@ -1,6 +1,6 @@
 @startuml
 !pragma layout smetana
-title ReperTrack - Diagrama de Clases de Diseno
+title ReperTrack - Diagrama de Clases de Diseño
 
 skinparam classAttributeIconSize 0
 skinparam classFontSize 11
@@ -9,7 +9,7 @@ skinparam classBorderColor #1c5c3c
 skinparam packageStyle rectangle
 skinparam packageBackgroundColor #F0F4F0
 
-package modelo {
+package model {
   class Musico {
     -musicoId : int
     -nombre : String
@@ -70,9 +70,43 @@ package modelo {
   class Estadistica {
     -minutosPorInstrumento : Map
     -minutosPorElemento : Map
+    -minutosPorDiaSemana : int[7]
     -totalSesiones : int
     +agregarMinutosInstrumento(id : int, min : long)
+    +agregarMinutosDia(dia : int, min : int)
+    +getMinutosPorDiaSemana() : int[]
     +estaVacia() : boolean
+  }
+
+  class Alerta {
+    -elementoId : int
+    -nombreElemento : String
+    -ultimaPractica : LocalDate
+    -diasSinPractica : int
+    -motivo : String
+  }
+
+  enum Nivel {
+    PRINCIPIANTE
+    INTERMEDIO
+    AVANZADO
+  }
+  enum TipoInstrumento {
+    CUERDA
+    VIENTO
+    PERCUSION
+    TECLADO
+    OTRO
+  }
+  enum TipoEjercicio {
+    ESCALA
+    ARPEGIO
+    ETUDE
+    PATRON_RITMICO
+  }
+  enum CategoriaElemento {
+    CANCION
+    EJERCICIO
   }
 }
 
@@ -80,7 +114,10 @@ package excepcion {
   class RangoInvalidoException
   class LongitudExcedidaException
   class SesionSinReferenciaException
+  class ElementoInexistenteException
+  class InstrumentoInexistenteException
   class PersistenciaException
+  class ArchivoException
 }
 
 package util {
@@ -134,6 +171,10 @@ package service {
   class ExportadorPdfService {
     +exportar(est : Estadistica, ruta : String) : void
   }
+  class ExportadorTextoService {
+    +exportar(est : Estadistica, ruta : String) : void
+    +leer(ruta : String) : String
+  }
 }
 
 package controlador {
@@ -173,6 +214,7 @@ ElementoService --> ElementoDAO
 SesionService --> SesionDAO
 EstadisticaService --> SesionDAO
 MotorAlertasService --> SesionDAO
+MotorAlertasService --> Alerta : genera
 
 MenuPrincipal --> SesionController
 MenuPrincipal --> InstrumentoController

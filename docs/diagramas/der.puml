@@ -1,6 +1,6 @@
 @startuml
 !pragma layout smetana
-title ReperTrack - Diagrama Entidad-Relacion (MySQL 8 / InnoDB / utf8mb4)
+title ReperTrack - Diagrama Entidad-Relación (MySQL 8 / InnoDB / utf8mb4)
 
 skinparam entityAttributeIconSize 0
 skinparam entityFontSize 11
@@ -75,7 +75,7 @@ I ||--o{ S : "1..N  utilizado_en"
 E ||--o{ S : "1..N  aborda"
 
 note bottom of I
-  Baja logica con activo=0.
+  Baja lógica con activo=0.
   ON DELETE RESTRICT: las FK
   nunca borran en cascada para
   no perder sesiones.
@@ -84,8 +84,8 @@ end note
 note bottom of E
   Single-table inheritance: la
   columna categoria + columnas
-  especificas nulables distinguen
-  Cancion de Ejercicio.
+  específicas nulables distinguen
+  Canción de Ejercicio.
 end note
 
 @enduml

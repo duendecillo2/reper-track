@@ -40,7 +40,7 @@ public class SesionService {
             throws SesionSinReferenciaException, RangoInvalidoException, LongitudExcedidaException, PersistenciaException {
         if (instrumento == null || elemento == null) {
             throw new SesionSinReferenciaException(
-                "Debe seleccionar un instrumento y un elemento de estudio antes de iniciar la sesion (RN-01).");
+                "Debe seleccionar un instrumento y un elemento de estudio antes de iniciar la sesión (RN-01).");
         }
         if (tiempoMin <= 0) {
             throw new RangoInvalidoException("El tiempo neto debe ser mayor a cero (RN-02).");
@@ -57,7 +57,7 @@ public class SesionService {
             throws PersistenciaException {
         if (instrumentoId <= 0 || elementoId <= 0) {
             throw new com.repertrack.excepcion.PersistenciaException(
-                "Debe seleccionar un instrumento y un elemento de estudio antes de iniciar la sesion (RN-01).");
+                "Debe seleccionar un instrumento y un elemento de estudio antes de iniciar la sesión (RN-01).");
         }
         if (tiempoMin <= 0) {
             throw new com.repertrack.excepcion.PersistenciaException(

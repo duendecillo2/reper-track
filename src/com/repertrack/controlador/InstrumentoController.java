@@ -30,17 +30,17 @@ public class InstrumentoController {
             System.out.println("+==============================================================+");
             System.out.println("|                  INSTRUMENTOS  (ABM)                         |");
             System.out.println("+==============================================================+");
-            System.out.println("|  1) Alta   2) Listar   3) Modificar   4) Baja logica        |");
-            System.out.println("|  0) Volver al menu principal                                  |");
+            System.out.println("|  1) Alta   2) Listar   3) Modificar   4) Baja lógica        |");
+            System.out.println("|  0) Volver al menú principal                                  |");
             System.out.println("+==============================================================+");
-            int op = leerEntero("Opcion");
+            int op = leerEntero("Opción");
             switch (op) {
                 case 1: alta();        break;
                 case 2: listar();      break;
                 case 3: modificar();   break;
                 case 4: bajaLogica();  break;
                 case 0: volver = true; break;
-                default: System.out.println("[WARN] Opcion invalida.");
+                default: System.out.println("[WARN] Opción inválida.");
             }
         }
     }
@@ -51,7 +51,7 @@ public class InstrumentoController {
             i.setMusico(musicoActual);
             System.out.print("Nombre del instrumento: ");
             i.setNombre(scanner.nextLine());
-            System.out.print("Tipo (cuerda/viento/percusion/teclado/otro): ");
+            System.out.print("Tipo (cuerda/viento/percusión/teclado/otro): ");
             i.setTipo(TipoInstrumento.desde(scanner.nextLine()));
             System.out.print("Observaciones (opcional): ");
             i.setObservaciones(scanner.nextLine());
@@ -89,13 +89,13 @@ public class InstrumentoController {
             if (id <= 0) return;
             Instrumento i = service.obtener(id);
             if (i == null) { System.out.println("[ERROR] No existe el instrumento " + id); return; }
-            System.out.print("Nuevo nombre (vacio = mantiene): ");
+            System.out.print("Nuevo nombre (vacío = mantiene): ");
             String nombre = scanner.nextLine();
             if (!nombre.trim().isEmpty()) i.setNombre(nombre);
-            System.out.print("Nuevo tipo (vacio = mantiene): ");
+            System.out.print("Nuevo tipo (vacío = mantiene): ");
             String tipo = scanner.nextLine();
             if (!tipo.trim().isEmpty()) i.setTipo(TipoInstrumento.desde(tipo));
-            System.out.print("Nueva observacion (vacio = mantiene): ");
+            System.out.print("Nueva observación (vacío = mantiene): ");
             String obs = scanner.nextLine();
             if (!obs.trim().isEmpty()) i.setObservaciones(obs);
             service.modificacion(i);
@@ -124,7 +124,7 @@ public class InstrumentoController {
             String s = scanner.nextLine().trim();
             if (s.isEmpty()) return -1;
             try { return Integer.parseInt(s); }
-            catch (NumberFormatException e) { System.out.println("[ERROR] Ingrese un numero entero valido."); }
+            catch (NumberFormatException e) { System.out.println("[ERROR] Ingrese un número entero válido."); }
         }
     }
 

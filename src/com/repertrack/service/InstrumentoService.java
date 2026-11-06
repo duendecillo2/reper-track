@@ -19,7 +19,7 @@ public class InstrumentoService {
     public void alta(Instrumento i) throws LongitudExcedidaException, PersistenciaException {
         if (i == null) throw new IllegalArgumentException("Instrumento nulo.");
         if (i.getNombre() == null || i.getNombre().trim().isEmpty()) {
-            throw new LongitudExcedidaException("El nombre del instrumento no puede estar vacio.");
+            throw new LongitudExcedidaException("El nombre del instrumento no puede estar vacío.");
         }
         if (i.getMusico() == null) throw new IllegalArgumentException("El instrumento debe pertenecer a un musico.");
         dao.insertar(i);

@@ -46,7 +46,7 @@ public final class ConexionDB {
         try {
             return DriverManager.getConnection(URL, USER, PASS);
         } catch (SQLException e) {
-            throw new PersistenciaException("No se pudo obtener conexion JDBC.", e);
+            throw new PersistenciaException("No se pudo obtener conexión JDBC.", e);
         }
     }
 

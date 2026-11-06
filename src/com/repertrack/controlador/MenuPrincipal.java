@@ -3,8 +3,8 @@ package com.repertrack.controlador;
 import java.util.Scanner;
 
 /**
- * Menu principal del prototipo TP3 (consola pura, sin frameworks de UI).
- * Despacha a los subcontroladores por numero de opcion con un switch clasico.
+ * Menú principal del prototipo (consola pura, sin frameworks de UI).
+ * Despacha a los subcontroladores por número de opción con un switch clásico.
  */
 public class MenuPrincipal {
 
@@ -28,7 +28,7 @@ public class MenuPrincipal {
         boolean salir = false;
         while (!salir) {
             mostrarMenu();
-            int opcion = leerEntero("Opcion");
+            int opcion = leerEntero("Opción");
             switch (opcion) {
                 case 1: instrumentoController.menu();   break;
                 case 2: elementoController.menu();     break;
@@ -37,8 +37,10 @@ public class MenuPrincipal {
                 case 5: estadisticaController.menu();  break;
                 case 6: alertaController.menu();       break;
                 case 7: estadisticaController.menuExportarPdf(); break;
+                case 8: estadisticaController.menuExportarTxt(); break;
+                case 9: estadisticaController.menuLeerTxt();     break;
                 case 0: salir = true;                   break;
-                default: System.out.println("[WARN] Opcion invalida. Intente nuevamente.");
+                default: System.out.println("[WARN] Opción inválida. Intente nuevamente.");
             }
         }
         System.out.println("Gracias por usar ReperTrack. Hasta luego.");
@@ -48,16 +50,18 @@ public class MenuPrincipal {
         System.out.println();
         System.out.println("+==============================================================+");
         System.out.println("|                    REPERTRACK v1.0  (consola)                |");
-        System.out.println("|        Sistema de Gestion de Repertorio y Practica            |");
+        System.out.println("|        Sistema de Gestión de Repertorio y Práctica           |");
         System.out.println("+==============================================================+");
-        System.out.println("|  1) Instrumentos                                              |");
-        System.out.println("|  2) Elementos de Estudio                                      |");
-        System.out.println("|  3) Registrar Sesion de Practica                              |");
-        System.out.println("|  4) Listar / Filtrar Sesiones                                 |");
-        System.out.println("|  5) Estadisticas de Progreso                                  |");
-        System.out.println("|  6) Alertas de Mantenimiento                                  |");
-        System.out.println("|  7) Exportar Reporte a PDF (CU011)                            |");
-        System.out.println("|  0) Salir                                                     |");
+        System.out.println("|  1) Instrumentos                                             |");
+        System.out.println("|  2) Elementos de Estudio                                     |");
+        System.out.println("|  3) Registrar Sesión de Práctica                             |");
+        System.out.println("|  4) Listar / Filtrar Sesiones                                |");
+        System.out.println("|  5) Estadísticas de Progreso                                 |");
+        System.out.println("|  6) Alertas de Mantenimiento                                 |");
+        System.out.println("|  7) Exportar Reporte a PDF (CU011)                           |");
+        System.out.println("|  8) Exportar Reporte a TXT (archivo de texto)                |");
+        System.out.println("|  9) Leer Reporte TXT generado                                |");
+        System.out.println("|  0) Salir                                                    |");
         System.out.println("+==============================================================+");
     }
 
@@ -67,7 +71,7 @@ public class MenuPrincipal {
             String s = scanner.nextLine().trim();
             if (s.isEmpty()) return -1;
             try { return Integer.parseInt(s); }
-            catch (NumberFormatException e) { System.out.println("[ERROR] Ingrese un numero entero valido."); }
+            catch (NumberFormatException e) { System.out.println("[ERROR] Ingrese un número entero válido."); }
         }
     }
 }

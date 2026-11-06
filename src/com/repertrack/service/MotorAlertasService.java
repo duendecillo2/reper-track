@@ -56,7 +56,7 @@ public class MotorAlertasService {
         for (int id : elementosActivos) {
             LocalDateTime u = ultima.get(id);
             long dias = (u == null) ? Long.MAX_VALUE : ChronoUnit.DAYS.between(u, LocalDateTime.now());
-            if (dias >= umbralDias) alertas.add("Elemento " + id + " lleva " + (u == null ? "nunca practicado" : dias + " dias") + " sin practica.");
+            if (dias >= umbralDias) alertas.add("Elemento " + id + " lleva " + (u == null ? "nunca practicado" : dias + " días") + " sin práctica.");
         }
         return alertas;
     }
@@ -74,7 +74,7 @@ public class MotorAlertasService {
             } else {
                 long dias = ChronoUnit.DAYS.between(ult, hoy);
                 if (dias > umbralDias) {
-                    cola.encolar(new Alerta(e.getId(), e.getNombre(), ult, (int) dias, "supera umbral de " + umbralDias + " dias"));
+                    cola.encolar(new Alerta(e.getId(), e.getNombre(), ult, (int) dias, "supera umbral de " + umbralDias + " días"));
                 }
             }
         }

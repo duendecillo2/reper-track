@@ -30,13 +30,13 @@ public class ExportadorTextoService {
         try {
             if (destino.getParent() != null) Files.createDirectories(destino.getParent());
             try (BufferedWriter w = Files.newBufferedWriter(destino, StandardCharsets.UTF_8)) {
-                w.write("ReperTrack - Reporte de Estadisticas");
+                w.write("ReperTrack - Reporte de Estadísticas");
                 w.newLine();
                 w.write("Total de sesiones: " + est.getTotalSesiones());
                 w.newLine();
-                w.write("Frecuencia semanal (ult. 7 dias): " + est.getFrecuenciaSemanal());
+                w.write("Frecuencia semanal (últ. 7 días): " + est.getFrecuenciaSemanal());
                 w.newLine();
-                w.write(String.format("Promedio por sesion: %.1f min", est.getPromedioMinutosPorSesion()));
+                w.write(String.format("Promedio por sesión: %.1f min", est.getPromedioMinutosPorSesion()));
                 w.newLine();
                 w.newLine();
                 w.write("Acumulado por instrumento (min):");

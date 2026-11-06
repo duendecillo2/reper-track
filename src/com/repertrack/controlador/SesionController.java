@@ -37,18 +37,18 @@ public class SesionController {
         while (!volver) {
             System.out.println();
             System.out.println("+==============================================================+");
-            System.out.println("|              REGISTRAR SESION DE PRACTICA                    |");
+            System.out.println("|              REGISTRAR SESIÓN DE PRÁCTICA                    |");
             System.out.println("+==============================================================+");
-            System.out.println("|  1) Registrar nueva sesion (manual o con cronometro)         |");
-            System.out.println("|  2) Ver ultimas sesiones registradas                          |");
-            System.out.println("|  0) Volver al menu principal                                  |");
+            System.out.println("|  1) Registrar nueva sesión (manual o con cronómetro)         |");
+            System.out.println("|  2) Ver últimas sesiones registradas                          |");
+            System.out.println("|  0) Volver al menú principal                                  |");
             System.out.println("+==============================================================+");
-            int op = leerEntero("Opcion");
+            int op = leerEntero("Opción");
             switch (op) {
                 case 1: registrar();      break;
                 case 2: listarRecientes(); break;
                 case 0: volver = true;     break;
-                default: System.out.println("[WARN] Opcion invalida.");
+                default: System.out.println("[WARN] Opción inválida.");
             }
         }
     }
@@ -63,27 +63,27 @@ public class SesionController {
             if (elem == null) return;
 
             System.out.println();
-            System.out.println("Cronometro:");
+            System.out.println("Cronómetro:");
             System.out.println("  1) Ingresar tiempo manualmente");
-            System.out.println("  2) Usar cronometro en vivo");
+            System.out.println("  2) Usar cronómetro en vivo");
             int modo = leerEntero("Modo (1 o 2)");
 
             int minutos = 0;
             if (modo == 2) {
                 minutos = cronometrar();
-                System.out.println("[OK] Cronometro finalizado: " + minutos + " min");
+                System.out.println("[OK] Cronómetro finalizado: " + minutos + " min");
             } else {
                 minutos = leerEntero("Tiempo neto (min, entero > 0)");
             }
 
-            System.out.print("Comentario (opcional, max. 500 caracteres): ");
+            System.out.print("Comentario (opcional, máx. 500 caracteres): ");
             String comentario = scanner.nextLine();
 
             SesionDePractica ses = new SesionDePractica(inst, elem, minutos, comentario);
             int id = sesionService.registrarSesion(inst, elem, minutos, comentario);
             ses.setId(id);
             recientes.agregarAlFinal(ses);
-            System.out.println("[OK] Sesion registrada con id=" + ses.getId() + " (" + ses.getTiempoNetoMin() + " min, " + ses.getFechaFormateada() + ")");
+            System.out.println("[OK] Sesión registrada con id=" + ses.getId() + " (" + ses.getTiempoNetoMin() + " min, " + ses.getFechaFormateada() + ")");
         } catch (SesionSinReferenciaException | RangoInvalidoException | LongitudExcedidaException | PersistenciaException ex) {
             System.out.println("[ERROR] " + ex.getMessage());
         } catch (Exception ex) {
@@ -129,7 +129,7 @@ public class SesionController {
             int id = leerEntero("ID del instrumento");
             if (id <= 0) return null;
             Instrumento inst = instrumentos.stream().filter(i -> i.getId() == id).findFirst().orElse(null);
-            if (inst == null) { System.out.println("[ERROR] Instrumento invalido."); return null; }
+            if (inst == null) { System.out.println("[ERROR] Instrumento inválido."); return null; }
             return inst;
         } catch (PersistenciaException ex) {
             System.out.println("[ERROR] " + ex.getMessage());
@@ -149,7 +149,7 @@ public class SesionController {
             int id = leerEntero("ID del elemento");
             if (id <= 0) return null;
             ElementoDeEstudio el = elems.stream().filter(e -> e.getId() == id).findFirst().orElse(null);
-            if (el == null) { System.out.println("[ERROR] Elemento invalido."); return null; }
+            if (el == null) { System.out.println("[ERROR] Elemento inválido."); return null; }
             return el;
         } catch (PersistenciaException ex) {
             System.out.println("[ERROR] " + ex.getMessage());
@@ -183,7 +183,7 @@ public class SesionController {
             String s = scanner.nextLine().trim();
             if (s.isEmpty()) return -1;
             try { return Integer.parseInt(s); }
-            catch (NumberFormatException e) { System.out.println("[ERROR] Ingrese un numero entero valido."); }
+            catch (NumberFormatException e) { System.out.println("[ERROR] Ingrese un número entero válido."); }
         }
     }
 

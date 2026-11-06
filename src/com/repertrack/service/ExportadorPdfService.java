@@ -32,10 +32,10 @@ public class ExportadorPdfService {
     /** API antigua (TP2). */
     public File exportarReporte(Map<String, String> indicadores, File destino) throws IOException {
         if (indicadores == null || indicadores.isEmpty())
-            throw new IllegalArgumentException("No hay indicadores para exportar (CU009 vacio).");
+            throw new IllegalArgumentException("No hay indicadores para exportar (CU009 vacío).");
         List<String> lineas = new ArrayList<>();
         lineas.add("ReperTrack - Reporte de estadisticas de progreso (CU011)");
-        lineas.add("Generado por el prototipo operacional - Seminario de Practica");
+        lineas.add("Generado por el prototipo operacional - Seminario de Práctica");
         lineas.add("");
         for (Map.Entry<String, String> e : indicadores.entrySet())
             lineas.add(ascii(e.getKey()) + ": " + ascii(e.getValue()));
@@ -63,7 +63,7 @@ public class ExportadorPdfService {
 
     private List<String> from(Estadistica est) {
         List<String> lineas = new ArrayList<>();
-        lineas.add("ReperTrack - Reporte de Estadisticas de Progreso");
+        lineas.add("ReperTrack - Reporte de Estadísticas de Progreso");
         lineas.add("Emitido: " + LocalDateTime.now().format(FMT));
         lineas.add("");
         lineas.add("Total de sesiones: " + est.getTotalSesiones());
@@ -78,8 +78,8 @@ public class ExportadorPdfService {
             lineas.add("  elem #" + kv.getKey() + " = " + kv.getValue() + " min");
         }
         lineas.add("");
-        lineas.add("Frecuencia semanal (ult. 7 dias): " + est.getFrecuenciaSemanal());
-        lineas.add("Promedio por sesion: " + String.format("%.1f", est.getPromedioMinutosPorSesion()) + " min");
+        lineas.add("Frecuencia semanal (ult. 7 días): " + est.getFrecuenciaSemanal());
+        lineas.add("Promedio por sesión: " + String.format("%.1f", est.getPromedioMinutosPorSesion()) + " min");
         return lineas;
     }
 

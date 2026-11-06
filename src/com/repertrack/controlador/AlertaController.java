@@ -23,16 +23,16 @@ public class AlertaController {
         while (!volver) {
             System.out.println();
             System.out.println("+==============================================================+");
-            System.out.println("|          ALERTAS DE MANTENIMIENTO (umbral: 30 dias)          |");
+            System.out.println("|          ALERTAS DE MANTENIMIENTO (umbral: 30 días)          |");
             System.out.println("+==============================================================+");
             System.out.println("|  1) Ver alertas   2) Cambiar umbral   0) Volver             |");
             System.out.println("+==============================================================+");
-            int op = leerEntero("Opcion");
+            int op = leerEntero("Opción");
             switch (op) {
                 case 1: verAlertas();    break;
                 case 2: cambiarUmbral(); break;
                 case 0: volver = true;   break;
-                default: System.out.println("[WARN] Opcion invalida.");
+                default: System.out.println("[WARN] Opción inválida.");
             }
         }
     }
@@ -42,7 +42,7 @@ public class AlertaController {
             Cola<Alerta> cola = service.calcular();
             if (cola.estaVacia()) { System.out.println("[OK] Sin alertas: todos los elementos fueron practicados recientemente."); return; }
             System.out.println("+--------------------------------------------------------------+");
-            System.out.println("| Elemento                 Ultima practica    Dias   Motivo    |");
+            System.out.println("| Elemento                 Última práctica    Días   Motivo    |");
             System.out.println("+--------------------------------------------------------------+");
             while (!cola.estaVacia()) {
                 Alerta a = cola.desencolar();
@@ -58,10 +58,10 @@ public class AlertaController {
     }
 
     private void cambiarUmbral() {
-        int n = leerEntero("Nuevo umbral (dias, > 0)");
-        if (n <= 0) { System.out.println("[WARN] Valor invalido."); return; }
+        int n = leerEntero("Nuevo umbral (días, > 0)");
+        if (n <= 0) { System.out.println("[WARN] Valor inválido."); return; }
         service.setUmbralDias(n);
-        System.out.println("[OK] Umbral actualizado a " + n + " dias.");
+        System.out.println("[OK] Umbral actualizado a " + n + " días.");
     }
 
     public int leerEntero(String campo) {
@@ -70,7 +70,7 @@ public class AlertaController {
             String s = scanner.nextLine().trim();
             if (s.isEmpty()) return -1;
             try { return Integer.parseInt(s); }
-            catch (NumberFormatException e) { System.out.println("[ERROR] Ingrese un numero entero valido."); }
+            catch (NumberFormatException e) { System.out.println("[ERROR] Ingrese un número entero válido."); }
         }
     }
 

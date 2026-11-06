@@ -74,11 +74,11 @@ public class SesionDePractica {
     public void validar() throws SesionSinReferenciaException {
         if (instrumento == null) {
             throw new SesionSinReferenciaException(
-                "Debe seleccionar un instrumento antes de registrar la sesion (RN-01).");
+                "Debe seleccionar un instrumento antes de registrar la sesión (RN-01).");
         }
         if (elemento == null) {
             throw new SesionSinReferenciaException(
-                "Debe seleccionar un elemento de estudio antes de registrar la sesion (RN-01).");
+                "Debe seleccionar un elemento de estudio antes de registrar la sesión (RN-01).");
         }
     }
 

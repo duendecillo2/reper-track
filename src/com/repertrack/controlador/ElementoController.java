@@ -34,10 +34,10 @@ public class ElementoController {
             System.out.println("+==============================================================+");
             System.out.println("|            ELEMENTOS DE ESTUDIO  (ABM)                       |");
             System.out.println("+==============================================================+");
-            System.out.println("|  1) Alta   2) Listar   3) Modificar   4) Baja logica        |");
+            System.out.println("|  1) Alta   2) Listar   3) Modificar   4) Baja lógica        |");
             System.out.println("|  5) Deshacer ultimo alta    0) Volver                        |");
             System.out.println("+==============================================================+");
-            int op = leerEntero("Opcion");
+            int op = leerEntero("Opción");
             switch (op) {
                 case 1: alta();        break;
                 case 2: listar();      break;
@@ -45,7 +45,7 @@ public class ElementoController {
                 case 4: bajaLogica();  break;
                 case 5: deshacer();    break;
                 case 0: volver = true; break;
-                default: System.out.println("[WARN] Opcion invalida.");
+                default: System.out.println("[WARN] Opción inválida.");
             }
         }
     }
@@ -59,7 +59,7 @@ public class ElementoController {
             if (inst == null) { System.out.println("[ERROR] No existe el instrumento " + idInstrumento); return; }
             System.out.print("Nombre del elemento: ");
             String nombre = scanner.nextLine();
-            System.out.print("Categoria (1=Cancion, 2=Ejercicio): ");
+            System.out.print("Categoría (1=Canción, 2=Ejercicio): ");
             String cat = scanner.nextLine().trim();
             int dif = leerEntero("Dificultad (1-10)");
             int tdo = leerEntero("Tiempo estimado de dominio (min)");
@@ -71,9 +71,9 @@ public class ElementoController {
                 c.setDificultad(dif);
                 c.setTiempoEstimadoDominioMin(tdo);
                 System.out.print("Autor: "); c.setAutor(scanner.nextLine());
-                System.out.print("Interprete original (opcional): "); c.setInterpreteOriginal(scanner.nextLine());
+                System.out.print("Intérprete original (opcional): "); c.setInterpreteOriginal(scanner.nextLine());
                 System.out.print("Tonalidad (opcional): "); c.setTonalidad(scanner.nextLine());
-                System.out.print("Compas (opcional): "); c.setCompas(scanner.nextLine());
+                System.out.print("Compás (opcional): "); c.setCompas(scanner.nextLine());
                 e = c;
             } else {
                 Ejercicio x = new Ejercicio();
@@ -81,14 +81,14 @@ public class ElementoController {
                 x.setNombre(nombre);
                 x.setDificultad(dif);
                 x.setTiempoEstimadoDominioMin(tdo);
-                System.out.print("Tipo de ejercicio (escala/arpegio/etude/patron ritmico): ");
+                System.out.print("Tipo de ejercicio (escala/arpegio/etude/patrón rítmico): ");
                 x.setTipoEjercicio(TipoEjercicio.desde(scanner.nextLine()));
                 int bpm = leerEntero("Tempo sugerido (BPM, 20-300)");
                 x.setBpmSugerido(bpm);
                 e = x;
             }
             service.alta(e);
-            System.out.println("[OK] Elemento creado con id=" + e.getId() + " (categoria=" + e.getCategoria() + ")");
+            System.out.println("[OK] Elemento creado con id=" + e.getId() + " (categoría=" + e.getCategoria() + ")");
         } catch (RangoInvalidoException | LongitudExcedidaException | PersistenciaException ex) {
             System.out.println("[ERROR] " + ex.getMessage());
         } catch (Exception ex) {
@@ -100,7 +100,7 @@ public class ElementoController {
         try {
             List<ElementoDeEstudio> todos = service.listar();
             System.out.println("+--------------------------------------------------------------+");
-            System.out.println("| ID  Nombre               Categoria    Dif.   Instrumento      |");
+            System.out.println("| ID  Nombre               Categoría    Dif.   Instrumento      |");
             System.out.println("+--------------------------------------------------------------+");
             for (ElementoDeEstudio e : todos) {
                 String instNombre = e.getInstrumento() == null ? "?" : e.getInstrumento().getNombre();
@@ -121,19 +121,19 @@ public class ElementoController {
             if (id <= 0) return;
             ElementoDeEstudio e = service.obtener(id);
             if (e == null) { System.out.println("[ERROR] No existe el elemento " + id); return; }
-            System.out.print("Nuevo nombre (vacio=mantiene): ");
+            System.out.print("Nuevo nombre (vacío=mantiene): ");
             String n = scanner.nextLine();
             if (!n.trim().isEmpty()) e.setNombre(n);
             int dif = leerEntero("Nueva dificultad (0=mantiene)");
             if (dif > 0) e.setDificultad(dif);
             if (e instanceof Cancion) {
                 Cancion c = (Cancion) e;
-                System.out.print("Nuevo autor (vacio=mantiene): ");
+                System.out.print("Nuevo autor (vacío=mantiene): ");
                 String a = scanner.nextLine();
                 if (!a.trim().isEmpty()) c.setAutor(a);
             } else if (e instanceof Ejercicio) {
                 Ejercicio x = (Ejercicio) e;
-                System.out.print("Nuevo tipo (vacio=mantiene): ");
+                System.out.print("Nuevo tipo (vacío=mantiene): ");
                 String t = scanner.nextLine();
                 if (!t.trim().isEmpty()) x.setTipoEjercicio(TipoEjercicio.desde(t));
                 int bpm = leerEntero("Nuevo BPM (0=mantiene)");
@@ -162,7 +162,7 @@ public class ElementoController {
     private void deshacer() {
         if (!service.puedeDeshacer()) { System.out.println("[WARN] No hay altas pendientes de deshacer."); return; }
         ElementoDeEstudio e = service.deshacerUltimo();
-        System.out.println("[INFO] Ultimo alta en pila: id=" + e.getId() + " nombre=" + e.getNombre() + " (no se persiste el undo).");
+        System.out.println("[INFO] Último alta en pila: id=" + e.getId() + " nombre=" + e.getNombre() + " (no se persiste el undo).");
     }
 
     private void listarInstrumentos() {
@@ -181,7 +181,7 @@ public class ElementoController {
             String s = scanner.nextLine().trim();
             if (s.isEmpty()) return -1;
             try { return Integer.parseInt(s); }
-            catch (NumberFormatException e) { System.out.println("[ERROR] Ingrese un numero entero valido."); }
+            catch (NumberFormatException e) { System.out.println("[ERROR] Ingrese un número entero válido."); }
         }
     }
 

@@ -1,0 +1,11 @@
+# Build
+build/
+target/
+*.class
+*.jar
+
+# Reportes generados en tiempo de ejecución
+reportes/
+
+# Renderizados temporales
+CANGUILLEN-JUAN_MARTIN-AP4-*.png

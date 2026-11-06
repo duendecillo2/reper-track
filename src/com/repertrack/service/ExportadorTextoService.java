@@ -19,7 +19,7 @@ import java.util.Map;
 public class ExportadorTextoService {
 
     private static final String[] DIAS = {
-        "lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"
+        "lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"
     };
 
     public void exportar(Estadistica est, String ruta) throws ArchivoException {
@@ -46,7 +46,7 @@ public class ExportadorTextoService {
                     w.newLine();
                 }
                 w.newLine();
-                w.write("Distribucion semanal (min):");
+                w.write("Distribución semanal (min):");
                 w.newLine();
                 int[] minutos = est.getMinutosPorDiaSemana();
                 for (int i = 0; i < DIAS.length; i++) {

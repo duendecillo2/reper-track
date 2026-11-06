@@ -1,0 +1,13 @@
+# Build
+build/
+target/
+*.class
+
+# Reportes generados en tiempo de ejecución
+reportes/
+
+# Estado interno del flujo de trabajo
+.claude/
+
+# Renderizados temporales
+CANGUILLEN-JUAN_MARTIN-AP4-*.png

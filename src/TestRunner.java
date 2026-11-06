@@ -240,7 +240,7 @@ public class TestRunner {
                 String contenido = txt.leer(tmpTxt.toString());
                 check(contenido.contains("Total de sesiones: 2")
                         && contenido.contains("37.5")
-                        && contenido.contains("Distribucion semanal"),
+                        && contenido.contains("Distribución semanal"),
                     "CP16 TXT escribe y lee estadisticas");
             } catch (Exception ex) {
                 check(false, "CP16 TXT escribe y lee estadisticas");

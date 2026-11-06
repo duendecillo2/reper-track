@@ -42,7 +42,7 @@ INSERT INTO instrumento (musico_id, nombre, tipo)
 -- PRUEBA 6: DELETE de musico con instrumentos  (debe FALLAR por FK)
 DELETE FROM musico WHERE musico_id = 1;
 
--- PRUEBA 7: comentario > 500 chars  (debe FALLAR por CHECK)
+-- PRUEBA 7: comentario > 500 chars  (debe FALLAR por VARCHAR(500)/CHECK)
 INSERT INTO sesion_practica (instrumento_id, elemento_id, tiempo_neto_min,
   comentario)
   VALUES (1, 1, 30, REPEAT('x', 501));

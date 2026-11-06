@@ -14,6 +14,7 @@ import com.repertrack.model.Nivel;
 import com.repertrack.model.SesionDePractica;
 import com.repertrack.model.TipoEjercicio;
 import com.repertrack.model.TipoInstrumento;
+import com.repertrack.service.EstadisticaService;
 import com.repertrack.service.ExportadorPdfService;
 
 import java.time.LocalDate;
@@ -199,6 +200,25 @@ public class TestRunner {
             } catch (IllegalStateException ex) {
                 check(ex.getMessage() != null && ex.getMessage().contains("No hay datos"),
                     "CP14 reporte vacio rechazado");
+            }
+
+            // CP15: arreglo semanal (7 posiciones, suma por dia)
+            sesionDAO.limpiar();
+            try {
+                SesionDePractica lunes = new SesionDePractica(inst1, cancion, 30, "");
+                lunes.setFechaRegistro(LocalDateTime.of(2026, 10, 5, 10, 0)); // lunes
+                sesionDAO.guardar(lunes);
+
+                SesionDePractica miercoles = new SesionDePractica(inst1, cancion, 45, "");
+                miercoles.setFechaRegistro(LocalDateTime.of(2026, 10, 7, 18, 0)); // miercoles
+                sesionDAO.guardar(miercoles);
+
+                Estadistica semanal = new EstadisticaService(sesionDAO).calcular();
+                int[] porDia = semanal.getMinutosPorDiaSemana();
+                check(porDia.length == 7 && porDia[0] == 30 && porDia[2] == 45,
+                    "CP15 arreglo semanal 7 dias (lun=30, mie=45)");
+            } catch (Exception ex) {
+                check(false, "CP15 arreglo semanal 7 dias (lun=30, mie=45)");
             }
 
         } catch (Exception ex) {

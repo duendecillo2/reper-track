@@ -9,6 +9,7 @@ public class Estadistica {
 
     private final Map<Integer, Long> minutosPorInstrumento = new LinkedHashMap<>();
     private final Map<Integer, Long> minutosPorElemento = new LinkedHashMap<>();
+    private final int[] minutosPorDiaSemana = new int[7];
     private int frecuenciaSemanal;
     private double promedioMinutosPorSesion;
     private int totalSesiones;
@@ -23,6 +24,13 @@ public class Estadistica {
 
     public void agregarMinutosElemento(int elementoId, long minutos) {
         minutosPorElemento.merge(elementoId, minutos, Long::sum);
+    }
+
+    /** Distribucion fija de minutos por dia (0=lunes ... 6=domingo). Copia defensiva. */
+    public int[] getMinutosPorDiaSemana() { return minutosPorDiaSemana.clone(); }
+
+    public void agregarMinutosDia(int diaSemana, int minutos) {
+        if (diaSemana >= 1 && diaSemana <= 7) minutosPorDiaSemana[diaSemana - 1] += minutos;
     }
 
     public int getFrecuenciaSemanal() { return frecuenciaSemanal; }

@@ -57,6 +57,9 @@ public class EstadisticaService {
         for (Map.Entry<Integer, Long> kv : sesionDAO.acumuladoPorElemento().entrySet()) {
             e.agregarMinutosElemento(kv.getKey(), kv.getValue());
         }
+        for (SesionDePractica s : todas) {
+            e.agregarMinutosDia(s.getFechaRegistro().getDayOfWeek().getValue(), s.getTiempoNetoMin());
+        }
         e.setFrecuenciaSemanal(sesionDAO.frecuenciaUltimos7Dias());
         e.setPromedioMinutosPorSesion(sesionDAO.promedioTiempo());
         return e;

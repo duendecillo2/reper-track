@@ -2,6 +2,7 @@ import com.repertrack.dao.SesionDAO;
 import com.repertrack.excepcion.LongitudExcedidaException;
 import com.repertrack.excepcion.PersistenciaException;
 import com.repertrack.excepcion.RangoInvalidoException;
+import com.repertrack.excepcion.ArchivoException;
 import com.repertrack.excepcion.SesionSinReferenciaException;
 import com.repertrack.model.Alerta;
 import com.repertrack.model.Cancion;
@@ -16,6 +17,7 @@ import com.repertrack.model.TipoEjercicio;
 import com.repertrack.model.TipoInstrumento;
 import com.repertrack.service.EstadisticaService;
 import com.repertrack.service.ExportadorPdfService;
+import com.repertrack.service.ExportadorTextoService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -219,6 +221,52 @@ public class TestRunner {
                     "CP15 arreglo semanal 7 dias (lun=30, mie=45)");
             } catch (Exception ex) {
                 check(false, "CP15 arreglo semanal 7 dias (lun=30, mie=45)");
+            }
+
+            // CP16: reporte TXT se escribe y se vuelve a leer
+            java.nio.file.Path tmpTxt = null;
+            try {
+                Estadistica estTxt = new Estadistica();
+                estTxt.setTotalSesiones(2);
+                estTxt.agregarMinutosInstrumento(1, 75L);
+                estTxt.setPromedioMinutosPorSesion(37.5);
+                estTxt.setFrecuenciaSemanal(2);
+                estTxt.agregarMinutosDia(1, 30);
+                estTxt.agregarMinutosDia(3, 45);
+
+                tmpTxt = java.nio.file.Files.createTempFile("repertrack-", ".txt");
+                ExportadorTextoService txt = new ExportadorTextoService();
+                txt.exportar(estTxt, tmpTxt.toString());
+                String contenido = txt.leer(tmpTxt.toString());
+                check(contenido.contains("Total de sesiones: 2")
+                        && contenido.contains("37.5")
+                        && contenido.contains("Distribucion semanal"),
+                    "CP16 TXT escribe y lee estadisticas");
+            } catch (Exception ex) {
+                check(false, "CP16 TXT escribe y lee estadisticas");
+            } finally {
+                try { if (tmpTxt != null) java.nio.file.Files.deleteIfExists(tmpTxt); } catch (Exception ignored) {}
+            }
+
+            // CP17: leer un archivo inexistente lanza ArchivoException
+            try {
+                new ExportadorTextoService().leer("/tmp/repertrack-no-existe-" + System.nanoTime() + ".txt");
+                check(false, "CP17 lectura inexistente rechazada");
+            } catch (ArchivoException ex) {
+                check(true, "CP17 lectura inexistente rechazada");
+            } catch (Exception ex) {
+                check(false, "CP17 lectura inexistente rechazada");
+            }
+
+            // CP18: reporte TXT vacio rechazado
+            try {
+                new ExportadorTextoService().exportar(new Estadistica(), "/tmp/repertrack-vacio.txt");
+                check(false, "CP18 reporte TXT vacio rechazado");
+            } catch (IllegalStateException ex) {
+                check(ex.getMessage() != null && ex.getMessage().contains("No hay datos"),
+                    "CP18 reporte TXT vacio rechazado");
+            } catch (Exception ex) {
+                check(false, "CP18 reporte TXT vacio rechazado");
             }
 
         } catch (Exception ex) {
